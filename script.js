@@ -1,26 +1,30 @@
-// cantidad de series que se cargaran cada vez que se presione siguiente
-const cantidadSeries = 7;
-const pagenFinal = cantidadSeries;
-const pageinicial = 0;
-const temaActual = "series"
+const cargarComidas = async() => {
+  try {
+      const respuesta = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood`)
 
-const series = {
-    "apiKey":"4c5e3b7fd39343d5a04a529a1ee34ecc",
-      fetchSeries:function(cateforias){
-        fetch(
-            "https://newsapi.org/v2/everything?q="
-            +Categoria+
-           "&lenguaje=es&apiKey="+this.apiKey
-        )
-        .then((response)=>response.json())
-        .then((data)=>this.displaySeries(data));
+      console.log(respuesta);
 
-      },
+      // Si la respuesta es correcta
+      if(respuesta.status === 200){
+          const datos = await respuesta.json()
+          console.log(datos);
+          
+          let Comidas = ''
+          datos.meals.forEach(comida => {
+              Comidas += 
+                  `<div class="comidas">
+                  <img class="imagen" src="${comida.strMealThumb}"></img>
+                  <h1 class="titulo">${comida.title}</h1>
+              </div>`
+              
+          });
 
-      displaySeries:function(data){
-        //Elimino todo si se hace selecionado un tema nuevo
-        if(pageinicial==0){
-            document.querySelector(".container-series").textContent ="";
-        }
-      }
+          document.getElementById("container").innerHTML = Comidas
+      } 
+
+  } catch(error){
+      console.log(error)
+  }
+
 }
+cargarComidas()
